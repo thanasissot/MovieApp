@@ -1,0 +1,16 @@
+<div class="eui-table__scrollable-wrapper">
+    <table #euiTable euiTable euiTableResponsive [rows]="inputFromParent">
+        <ng-template euiTemplate="header">
+            <tr>
+                <th>
+                    Actor Name
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template let-row euiTemplate="body">
+            <tr>
+                <td>{{ row.fullname }}</td>
+            </tr>
+        </ng-template>
+    </table>
+</div>

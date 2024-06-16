@@ -1,0 +1,32 @@
+<eui-app>
+    <eui-app-toolbar>
+        <eui-toolbar>
+            <eui-toolbar-logo></eui-toolbar-logo>
+            <eui-toolbar-app appName="appName"></eui-toolbar-app>
+            <eui-toolbar-environment>MOCK</eui-toolbar-environment>
+            <eui-toolbar-items euiPositionRight>
+                <eui-toolbar-item>
+                    <eui-user-profile subInfos="eUI developer" isShowAvatarInitials>
+                        <eui-user-profile-menu>
+                            <eui-user-profile-menu-item>
+                                <eui-icon-svg icon="old-eui-person-thin"></eui-icon-svg> {{ 'eui.my-profile-informations' | translate }}
+                            </eui-user-profile-menu-item>
+                            <eui-user-profile-menu-item>
+                                <eui-icon-svg icon="old-eui-logout-thin"></eui-icon-svg> {{ 'eui.sign-out' | translate }}
+                            </eui-user-profile-menu-item>
+                        </eui-user-profile-menu>
+                    </eui-user-profile>
+                </eui-toolbar-item>
+
+                <eui-toolbar-item>
+                    <eui-notifications [count]="notificationItems?.length" [items]="notificationItems"></eui-notifications>
+                </eui-toolbar-item>
+            </eui-toolbar-items>
+        </eui-toolbar>
+    </eui-app-toolbar>
+    <eui-app-sidebar>
+        <eui-app-sidebar-body>
+            <eui-app-sidebar-menu [items]="sidebarItems"></eui-app-sidebar-menu>
+        </eui-app-sidebar-body>
+    </eui-app-sidebar>
+</eui-app>

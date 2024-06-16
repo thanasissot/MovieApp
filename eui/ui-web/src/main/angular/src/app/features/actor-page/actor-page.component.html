@@ -1,0 +1,50 @@
+<eui-page>
+    <eui-page-header label="{{ 'page.home.title' | translate }}"></eui-page-header>
+
+    <eui-page-content>
+        <eui-card style="margin-bottom: 25px;">
+            <eui-card-header>
+                <eui-card-header-title>
+                    Actors
+                </eui-card-header-title>
+            </eui-card-header>
+            <eui-card-content>
+                <div class="eui-table__scrollable-wrapper">
+                    <table #euiTable euiTable asyncTable [loading]="loading" [rows]="actors" >
+                        <ng-template euiTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of cols">
+                                    {{ col.label }}
+                                </th>
+                            </tr>
+                            <tr class="eui-table__columns-filter" [formGroup]="form">
+                                <th></th>
+                                <th id="fil-col-movie-filter">
+                                    <input formControlName="nameFilter" aria-label="Name Filter" euiInputText>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template let-row euiTemplate="body">
+                            <tr>
+                                <td>{{ row.id }}</td>
+                                <td>{{ row.fullname }}</td>
+                                <td>
+                                    <app-movie-sub-list [inputFromParent]="row.movies"></app-movie-sub-list>
+                                </td>
+
+                            </tr>
+                        </ng-template>
+
+                        <ng-template euiTemplate="emptyMessage">
+                            <tr>
+                                <td class="eui-u-text-center" colspan="7">No data</td>
+                            </tr>
+                        </ng-template>
+                    </table>
+                </div>
+                <eui-paginator #paginator [page]="page" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [length]="asyncDataSourceLength"></eui-paginator>            </eui-card-content>
+
+        </eui-card>
+    </eui-page-content>
+</eui-page>

@@ -1,0 +1,21 @@
+<eui-card>
+    <eui-card-header>
+        <eui-card-header-title>
+            Add movie
+        </eui-card-header-title>
+    </eui-card-header>
+    <eui-card-content>
+        <form [formGroup]="formValidation" [class.eui-t-form-compact]="isCompact" class="col-md-8">
+            <div euiInputGroup>
+                <label euiLabel [euiRequired]="isRequired">Movie name</label>
+                <input euiInputText name="lastname" id="movieName" formControlName="movieName" required  placeholder="Enter the Movie name."/>
+            </div>
+
+            <div euiInputGroup>
+                <label euiLabel [euiRequired]="isRequired">Year</label>
+                <input euiInputText name="lastname" id="year" formControlName="year" required  placeholder="Enter the year when the movie was premiered."/>
+            </div>
+        </form>
+        <button euiButton euiPrimary (click)="onSubmitForm()" class="eui-u-mt-m eui-u-mr-m">Add movie</button>
+    </eui-card-content>
+</eui-card>

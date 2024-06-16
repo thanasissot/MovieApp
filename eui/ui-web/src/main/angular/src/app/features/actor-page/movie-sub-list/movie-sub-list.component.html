@@ -1,0 +1,21 @@
+<button euiButton euiRounded euiBasicButton euiIconButton euiSizeS aria-label="Popover Icon Button" (click)="openPopover($event)">
+    <eui-icon iconClass="eui-icon-radio-button-checked"></eui-icon>
+</button>
+<eui-popover #popover [title]="'This is popover title'">
+    <div class="eui-table__scrollable-wrapper">
+        <table #innerEuiTable euiTable euiTableResponsive [rows]="inputFromParent" >
+            <ng-template euiTemplate="header">
+                <tr>
+                    <th>
+                        Movies
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template let-row euiTemplate="body">
+                <tr>
+                    <td>{{ row.movieName }}</td>
+                </tr>
+            </ng-template>
+        </table>
+    </div>
+</eui-popover>

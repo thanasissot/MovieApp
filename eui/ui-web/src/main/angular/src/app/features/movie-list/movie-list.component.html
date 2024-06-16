@@ -1,0 +1,83 @@
+<eui-page>
+    <eui-page-header label="{{ 'page.home.title' | translate }}"></eui-page-header>
+
+    <eui-page-content>
+        <eui-card style="margin-bottom: 25px;">
+            <eui-card-header>
+                <eui-card-header-title>
+                    Movies
+                </eui-card-header-title>
+            </eui-card-header>
+            <eui-card-content>
+                <div class="eui-table__scrollable-wrapper">
+                    <table #euiTable euiTable asyncTable [loading]="loading" [rows]="movies" >
+                        <ng-template euiTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of cols">
+                                    {{ col.label }}
+                                </th>
+                                <th>
+                                    Display Actors
+                                </th>
+                                <th>
+                                    Watched Action
+                                </th>
+                            </tr>
+                            <tr class="eui-table__columns-filter" [formGroup]="form">
+                                <th></th>
+                                <th id="fil-col-movie-filter">
+                                    <input formControlName="movieFilter" aria-label="Movie Filter" euiInputText>
+                                </th>
+                                <th id="fil-col-year-filter">
+                                    <input formControlName="yearFilter" aria-label="Year Filter" euiInputText>
+                                </th>
+                                <th id="fil-col-watched-filter">
+                                    <input formControlName="watchedFilter" aria-label="Watched Filter" euiInputCheckBox>
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template let-row euiTemplate="body">
+                            <tr>
+                                <td>{{ row.id }}</td>
+                                <td>{{ row.movieName }}</td>
+                                <td>{{ row.year }}</td>
+                                <td>
+                                    <input euiInputCheckBox id="default-checkbox_1" aria-label="checkbox_1" name="checkbox_default" [value]="row.value" [checked]="row.watched" readonly />
+                                </td>
+                                <td>
+                                    <eui-icon-svg set="eui" icon="eui-ecl-video" size="m" fillColor="grey-100" (click)="getActorsForMovie(row.id)"></eui-icon-svg>
+                                </td>
+                                <td>
+                                    <eui-icon-svg icon="eui-create" set="eui" size="m" fillColor="grey-100" (click)="openMessageBox(row.id, row.watched)"></eui-icon-svg>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template euiTemplate="emptyMessage">
+                            <tr>
+                                <td class="eui-u-text-center" colspan="7">No data</td>
+                            </tr>
+                        </ng-template>
+                    </table>
+                </div>
+                <eui-paginator #paginator [page]="page" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [length]="asyncDataSourceLength"></eui-paginator>            </eui-card-content>
+            <!-- MESSAGE BOX TEMPLATES -->
+            <eui-message-box #messageBox [title]="'Change Movie Status'"
+                     (accept)="onAccept()"
+                     (dismiss)="onDismiss()">
+
+                <div class="eui-u-flex">
+                    Change Watched Status to {{!movieWatchedStatusToChange}}
+                </div>
+            </eui-message-box>
+            <eui-dialog #dialog
+                        [title]="'Actors in Movie'"
+                        [hasFooter]="false">
+                <app-actor-list [inputFromParent]="actors"></app-actor-list>
+            </eui-dialog>
+        </eui-card>
+        <app-movie-add></app-movie-add>
+    </eui-page-content>
+</eui-page>
