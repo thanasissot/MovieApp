@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <a mat-button routerLink="/" class="top-menu-item"> Home</a>
+  <a mat-button routerLink="/movies" class="top-menu-item">Movies</a>
+  <a mat-button routerLink="/actors" class="top-menu-item">Actors</a>
+
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

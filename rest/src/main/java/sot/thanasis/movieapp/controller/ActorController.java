@@ -2,12 +2,12 @@ package sot.thanasis.movieapp.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sot.thanasis.movieapp.dto.ActorDto;
+import sot.thanasis.movieapp.dto.MovieDto;
 import sot.thanasis.movieapp.model.Actor;
 import sot.thanasis.movieapp.model.Movie;
 import sot.thanasis.movieapp.service.ActorService;
@@ -32,6 +32,11 @@ public class ActorController {
 	public ResponseEntity<Page<Actor>> findAllActorsPageable(@PathVariable Integer pageNo, @PathVariable Integer pageSize) {
 		Page<Actor> res = actorService.findAllPaged(pageNo, pageSize);
 		return ResponseEntity.ok(res);
+	}
+
+	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Actor> createMovie(@RequestBody ActorDto actorDto) throws Exception {
+		return ResponseEntity.ok(actorService.create(actorDto));
 	}
 
 

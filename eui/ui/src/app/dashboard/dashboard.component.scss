@@ -1,0 +1,41 @@
+#menuTitle{
+    font-size: medium;
+    margin-right: 20px;
+}
+.mat-toolbar{
+    height: 50px;
+}
+.mat-sidenav{
+    background-color: #3F51B5;
+    width: 180px;
+}
+.side-nav-items{
+    display: flex;
+    flex-direction: column;
+   color: white!important;
+    font-style:normal;
+
+}
+.side-nav-items :hover{
+    background-color: #303F9F;
+
+}
+.side-menu-item{
+    color: white!important;
+    margin-top: 10px;
+    margin-bottom:  10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.main-content{
+    margin: 20px;
+}
+
+
+@media (max-width:900px) {
+    .top-menu-item {
+        display: none;
+    }
+
+
+}

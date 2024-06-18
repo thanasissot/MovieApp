@@ -1,16 +1,17 @@
 package sot.thanasis.movieapp.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import sot.thanasis.movieapp.dto.ActorDto;
 import sot.thanasis.movieapp.dto.MovieDto;
+import sot.thanasis.movieapp.model.Actor;
 import sot.thanasis.movieapp.model.Movie;
 
 @Mapper(componentModel = "spring")
-public interface MovieMapper {
+public interface ActorMapper {
 
 //    MovieMapper INSTANCE = Mappers.getMapper( MovieMapper.class );
 
-    MovieDto entityToDto(Movie entity);
+    ActorDto entityToDto(Actor entity);
 
-    Movie dtoToEntity(MovieDto dto);
+    Actor dtoToEntity(ActorDto dto);
 }
