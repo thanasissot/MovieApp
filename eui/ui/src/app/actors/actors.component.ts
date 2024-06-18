@@ -1,4 +1,4 @@
-import { Component,AfterViewInit } from '@angular/core';
+import {Component, AfterViewInit, inject} from '@angular/core';
 import { Actor } from '../models/actor';
 import {MOVIES} from '../models/mock.movies';
 import {
@@ -11,6 +11,9 @@ import { take } from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ChangeDetectorRef } from '@angular/core';
 import {Movie} from "../models/movie";
+import {DialogComponent} from "../movies/dialog.component";
+import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-actors',
@@ -18,11 +21,16 @@ import {Movie} from "../models/movie";
   styleUrl: './actors.component.scss',
     standalone: true,
   imports: [NgFor, NgIf, FormsModule,
-    MatTableModule, MatProgressSpinnerModule, ReactiveFormsModule
+    MatTableModule, MatProgressSpinnerModule, ReactiveFormsModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle, MatButtonModule,
   ],
 })
 export class ActorsComponent implements AfterViewInit {
-  displayedColumns: string[] = ['Id', 'Name'];
+  readonly dialog = inject(MatDialog);
+  displayedColumns: string[] = ['Id', 'Name', 'Delete'];
 
   actors: Actor[] = [];
     selectedActor?: Actor;
@@ -78,4 +86,21 @@ export class ActorsComponent implements AfterViewInit {
           }});
     }
   }
+
+  deleteActor(actor: Actor) {
+
+  }
+
+  openDialogDeleteActor(enterAnimationDuration: string, exitAnimationDuration: string, actor: Actor) {
+    this.dialog.open(DialogComponent, {
+      data: {actor, 'actionActor':true },
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+
+  }
+
+
+
 }

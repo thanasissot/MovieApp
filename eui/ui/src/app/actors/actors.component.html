@@ -15,9 +15,15 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="Name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <th mat-header-cell *matHeaderCellDef> Full Name </th>
       <td mat-cell *matCellDef="let element"> {{element.fullname}} </td>
     </ng-container>
+
+    <ng-container matColumnDef="Delete">
+      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <td mat-cell *matCellDef="let element"> <i style="font-size:24px" class='fa fa-trash-o' (click)="openDialogDeleteActor('0ms', '0ms', element)"></i></td>
+    </ng-container>
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

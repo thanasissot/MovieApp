@@ -25,6 +25,10 @@ export class MovieService {
           return this.http.post<Movie>(this.apiUrl + '/create', movie, { headers: this.httpHeaders });
       }
 
+      deleteMovie(id: any): Observable<Movie> {
+        return this.http.delete<Movie>(this.apiUrl + `/${id}`, { headers: this.httpHeaders });
+      }
+
       getMoviesPageable(pageNo: number, pageSize: number): Observable<Movie[]> {
           return this.http.get<Movie[]>(this.apiUrl + `/${pageNo}/${pageSize}`);
     }
@@ -33,7 +37,7 @@ export class MovieService {
         return this.http.get<Actor[]>(this.apiUrl + `/actors/${id}`);
       }
 
-      updateMovie(id: number, watched:boolean): Observable<Movie> {
+      putUpdateMovie(id: number, watched:boolean): Observable<Movie> {
         return this.http.put<Movie>(this.apiUrl + `/${id}/${watched}`, {});
       }
 

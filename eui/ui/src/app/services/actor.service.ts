@@ -27,4 +27,7 @@ export class ActorService {
     return this.http.post<Actor>(this.apiUrl + '/create', actor, { headers: this.httpHeaders });
   }
 
+  deleteActor(id: any): Observable<Actor> {
+    return this.http.delete<Actor>(this.apiUrl + `/${id}`, { headers: this.httpHeaders });
+  }
 }

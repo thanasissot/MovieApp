@@ -11,12 +11,25 @@ import { take } from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {ChangeDetectionStrategy, inject} from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
+import {
+  MatDialog,
+  MatDialogActions,
+} from '@angular/material/dialog';
+import {DialogComponent} from "./dialog.component";
 
 @Component({
   standalone: true,
   imports: [NgFor,  NgIf, FormsModule,
   MatTableModule, MatProgressSpinnerModule,
     ReactiveFormsModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle, MatButtonModule,
+
 
   ],
   selector: 'app-movies',
@@ -24,7 +37,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
   styleUrl: './movies.component.scss'
 })
 export class MoviesComponent implements AfterViewInit {
-  displayedColumns: string[] = ['Id', 'Name', 'Year', 'Watched'];
+  readonly dialog = inject(MatDialog);
+
+  displayedColumns: string[] = ['Id', 'Name', 'Year', 'Watched', 'Edit', 'Delete'];
   movies = MOVIES;
   selectedMovie?: Movie;
   movieForm = new FormGroup({
@@ -81,6 +96,38 @@ export class MoviesComponent implements AfterViewInit {
           }});
     }
   }
+
+  deleteMovie(movie: Movie) {
+    this.movieService.deleteMovie(movie.id)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (er) => {
+          console.log(er);
+        }});
+  }
+
+  openDialogEdit(enterAnimationDuration: string, exitAnimationDuration: string, movie: Movie): void {
+    this.dialog.open(DialogComponent, {
+      data: {movie, "actionDelete":false},
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+  openDialogDelete(enterAnimationDuration: string, exitAnimationDuration: string, movie: Movie): void {
+    this.dialog.open(DialogComponent, {
+      data: {movie, "actionDelete":true},
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+
+
 
 
 }
