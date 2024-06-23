@@ -1,13 +1,24 @@
-import {AfterViewInit, ChangeDetectorRef, Component, inject, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {MOVIES} from "../../../models/mock.movies";
 import {Movie} from "../../../models/movie";
-import {take} from "rxjs/operators";
+import {catchError, map, startWith, switchMap, take} from "rxjs/operators";
 import {MovieService} from "../../../services/movie.service";
 import {FormBuilder} from "@angular/forms";
 import {DialogComponent} from "../../../movies-old/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {MatTable} from "@angular/material/table";
-import {MatButtonModule} from '@angular/material/button';
+import {MatTable, MatTableDataSource} from "@angular/material/table";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {merge, of as observableOf} from "rxjs";
 
 @Component({
   selector: 'app-movies-display',
@@ -18,33 +29,83 @@ import {MatButtonModule} from '@angular/material/button';
 export class MoviesDisplayComponent implements AfterViewInit {
   readonly dialog = inject(MatDialog);
   displayedColumns: string[] = ['Id', 'Name', 'Year', 'Watched', 'Edit', 'Delete'];
-  movies = MOVIES;
   selectedMovie?: Movie;
   loading = true;
+  resultsLength = 0;
+  // pageEvent: PageEvent;
+  pageIndex = 0;
+  pageSize = 5;
 
+  dataSource:Movie[] = [];
   @ViewChild(MatTable) table!: MatTable<Movie>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
 
   constructor(
     private movieService: MovieService,
     private cdref: ChangeDetectorRef,
     private _fb : FormBuilder,
-  ) {}
+  ) {
+  }
 
   ngAfterViewInit() {
-    this.movieService.getMoviesPageable(0, 10)
-      .pipe(take(1)).
-    subscribe({
-      next: (data: any) => {
-        console.log(data);
-        this.movies = data['content'] as Movie[];
+    // Set default pagination and sorting
+    // this.loadData(this.pageIndex, this.pageSize, 'id', 'asc');
+    // this.sort?.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.loading = true;
+          return this.movieService.getMoviesPageableAndSorted(this.pageIndex, this.pageSize, 'id', 'asc')
+            .pipe(catchError(() => observableOf(null)));
+        }),
+        map(data => {
+          if (data === null) return [];
+          return data;
+        })
+      )
+      .subscribe(data => {
+        this.dataSource = data['content'] as Movie[];
+        this.resultsLength = data['totalElements'];
+        this.table.renderRows();
         this.loading = false;
         this.cdref.detectChanges();
-      },
-      error: (er) => {
-        console.log(er);
-        this.loading = false;
-      }});
+      })
   }
+
+  // @ViewChild(MatSort) set matSort(ms: MatSort) {
+  //   this.sort = ms;
+  //   this.setDataSourceAttributes();
+  // }
+  //
+  // @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+  //   this.paginator = mp;
+  //   this.setDataSourceAttributes();
+  // }
+  //
+  // setDataSourceAttributes() {
+  //   this.dataSource.paginator = this.paginator;
+  //   this.dataSource.sort = this.sort;
+  //
+  // }
+
+
+  // ngAfterViewInit() {
+  //   // this.movies.sort = this.sort;
+  //   // this.movies.paginator = this.paginator;
+  //
+  //   this.paginator.page.subscribe(() =>
+  //     this.loadData(this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction)
+  //   );
+  //   this.sort.sortChange.subscribe(() => {
+  //     this.paginator.pageIndex = 0;
+  //     this.loadData(this.paginator.pageIndex, this.paginator.pageSize, this.sort.active, this.sort.direction);
+  //   });
+  // }
 
   openDialogEdit(enterAnimationDuration: string, exitAnimationDuration: string, movie: Movie): void {
     this.dialog.open(DialogComponent, {
@@ -65,8 +126,32 @@ export class MoviesDisplayComponent implements AfterViewInit {
   }
 
   addData() {
-    this.movies.push(MOVIES[1]);
-    this.table.renderRows();
   }
+
+  loadData(pageIndex: number, pageSize: number, sortColumn: string, sortOrder: string): void {
+    this.movieService.getMoviesPageableAndSorted(pageIndex, pageSize, sortColumn || 'id', sortOrder || 'asc')
+      .pipe(take(1)).
+    subscribe({
+      next: (data: any) => {
+        // this.dataSource = new MatTableDataSource<Movie>(data['content'] as Movie[]);
+        // this.dataSource.paginator = this.paginator;
+        // this.dataSource.sort = this.sort;
+        this.resultsLength = data['totalElements'] as number;
+        this.loading = false;
+        this.cdref.detectChanges();
+        this.table.renderRows();
+      },
+      error: (er) => {
+        console.log(er);
+        this.loading = false;
+      }});
+  }
+
+  pageChangeEvent(event: PageEvent) {
+    console.log(event);
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+  }
+
 
 }

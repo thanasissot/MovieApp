@@ -8,29 +8,35 @@ import {
   MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
-  MatRow, MatRowDef, MatTable
+  MatRow, MatRowDef, MatTable, MatTableDataSource, MatTableModule
 } from "@angular/material/table";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatCheckbox} from "@angular/material/checkbox";
+import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 @NgModule({
   declarations: [
     MoviesDisplayComponent
   ],
-  imports: [
-    CommonModule,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatProgressSpinner,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    MatHeaderCellDef,
-    MatCheckbox
-  ]
+    imports: [
+        CommonModule,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatProgressSpinner,
+        MatRow,
+        MatRowDef,
+        MatTable,
+        MatHeaderCellDef,
+        MatCheckbox,
+        MatPaginator,
+      MatPaginatorModule,
+      MatTableModule,
+      MatSort,
+    ]
 })
 export class MoviesModule { }

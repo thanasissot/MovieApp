@@ -16,6 +16,7 @@ import { DialogComponent } from './movies-old/dialog.component'
 import {MatDialogActions, MatDialogRef} from "@angular/material/dialog";
 import {MatDialogModule} from '@angular/material/dialog';
 import {MoviesModule} from "./features/movies/movies.module";
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 @NgModule({
 imports: [
   CommonModule,
@@ -46,7 +47,8 @@ imports: [
     {
       provide: MatDialogRef,
       useValue: {}
-    }
+    },
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

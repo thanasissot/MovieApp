@@ -34,6 +34,13 @@ public class MovieController {
 		return ResponseEntity.ok(res);
 	}
 
+	@GetMapping("/{pageNo}/{pageSize}/{sortCol}/{sortDirection}")
+	public ResponseEntity<Page<Movie>> findAllMoviesPageableAndSorted(@PathVariable Integer pageNo, @PathVariable Integer pageSize,
+															 @PathVariable String sortCol, @PathVariable String sortDirection) {
+		Page<Movie> res = movieService.findAllPagedAndSorted(pageNo, pageSize, sortCol, sortDirection);
+		return ResponseEntity.ok(res);
+	}
+
 	@GetMapping("/actors/{id}")
 	public ResponseEntity<List<Actor>> findAllActorsByMovieId(@PathVariable Integer id) {
 		List<Actor> res = movieService.findAllByMovieId(id);
