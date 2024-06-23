@@ -39,5 +39,12 @@ public class ActorController {
 		return ResponseEntity.ok(actorService.create(actorDto));
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Actor> deleteActor(@PathVariable Long id) throws Exception {
+		Actor actor = actorService.findById(id);
+		actorService.delete(actor);
+		return ResponseEntity.ok(actor);
+	}
+
 
 }

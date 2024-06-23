@@ -11,7 +11,7 @@ import { take } from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ChangeDetectorRef } from '@angular/core';
 import {Movie} from "../models/movie";
-import {DialogComponent} from "../movies/dialog.component";
+import {DialogComponent} from "../movies-old/dialog.component";
 import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 

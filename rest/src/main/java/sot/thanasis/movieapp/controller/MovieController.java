@@ -53,5 +53,12 @@ public class MovieController {
 		return ResponseEntity.ok(movie);
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Movie> deleteMovie(@PathVariable Long id) throws Exception {
+		Movie movie = movieService.findById(id);
+		movieService.delete(movie);
+		return ResponseEntity.ok(movie);
+	}
+
 
 }

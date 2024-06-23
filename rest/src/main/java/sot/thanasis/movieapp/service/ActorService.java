@@ -42,6 +42,15 @@ public class ActorService {
 		throw new Exception("Actor Already exists");
 	};
 
+	public Actor findById(Long id) {
+		try {
+			return actorRepository.findById(id).get();
+		} catch (NoSuchElementException e) {
+			throw new ResponseStatusException(
+					HttpStatus.NOT_FOUND, "Actor Not Found", e);
+		}
+	}
+
 	public Actor findByActorName(String fullname) {
 		Optional<Actor> optionalActor = actorRepository.findByFullname(fullname);
 		return optionalActor.orElse(null);

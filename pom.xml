@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>rest</module>
-        <module>eui</module>
+<!--        <module>eui</module>-->
     </modules>
 
     <properties>
