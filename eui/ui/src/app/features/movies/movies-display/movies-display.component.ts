@@ -28,7 +28,7 @@ import {merge, of as observableOf} from "rxjs";
 })
 export class MoviesDisplayComponent implements AfterViewInit {
   readonly dialog = inject(MatDialog);
-  displayedColumns: string[] = ['Id', 'Name', 'Year', 'Watched', 'Edit', 'Delete'];
+  displayedColumns: string[] = ['Id', 'movieName', 'Year', 'Watched', 'Edit', 'Delete'];
   selectedMovie?: Movie;
   loading = true;
   resultsLength = 0;
@@ -52,15 +52,15 @@ export class MoviesDisplayComponent implements AfterViewInit {
   ngAfterViewInit() {
     // Set default pagination and sorting
     // this.loadData(this.pageIndex, this.pageSize, 'id', 'asc');
-    // this.sort?.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
+    this.sort?.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.loading = true;
-          return this.movieService.getMoviesPageableAndSorted(this.pageIndex, this.pageSize, 'id', 'asc')
+          console.log(this.sort)
+          return this.movieService.getMoviesPageableAndSorted(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc')
             .pipe(catchError(() => observableOf(null)));
         }),
         map(data => {
@@ -77,21 +77,6 @@ export class MoviesDisplayComponent implements AfterViewInit {
       })
   }
 
-  // @ViewChild(MatSort) set matSort(ms: MatSort) {
-  //   this.sort = ms;
-  //   this.setDataSourceAttributes();
-  // }
-  //
-  // @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-  //   this.paginator = mp;
-  //   this.setDataSourceAttributes();
-  // }
-  //
-  // setDataSourceAttributes() {
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  //
-  // }
 
 
   // ngAfterViewInit() {

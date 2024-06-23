@@ -13,7 +13,7 @@ import {
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [
@@ -36,6 +36,7 @@ import {MatSort} from "@angular/material/sort";
         MatPaginator,
       MatPaginatorModule,
       MatTableModule,
+      MatSortModule,
       MatSort,
     ]
 })
