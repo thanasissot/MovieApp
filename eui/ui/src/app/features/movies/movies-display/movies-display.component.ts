@@ -13,7 +13,7 @@ import {Movie} from "../../../models/movie";
 import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, take, tap} from "rxjs/operators";
 import {MovieService} from "../../../services/movie.service";
 import {FormBuilder} from "@angular/forms";
-import {DialogComponent} from "../../../movies-old/dialog.component";
+import {DialogComponent} from "./dialog-for-movies/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
