@@ -14,30 +14,36 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatSort, MatSortModule} from "@angular/material/sort";
+import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
     MoviesDisplayComponent
   ],
-    imports: [
-        CommonModule,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatProgressSpinner,
-        MatRow,
-        MatRowDef,
-        MatTable,
-        MatHeaderCellDef,
-        MatCheckbox,
-        MatPaginator,
-      MatPaginatorModule,
-      MatTableModule,
-      MatSortModule,
-      MatSort,
-    ]
+  imports: [
+    CommonModule,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatProgressSpinner,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    MatHeaderCellDef,
+    MatCheckbox,
+    MatPaginator,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    MatSort,
+    MatLabel,
+    MatFormField,
+    MatFormFieldModule,
+    MatInputModule
+  ]
 })
 export class MoviesModule { }

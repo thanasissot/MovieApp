@@ -44,6 +44,13 @@ public class MovieService {
 		return movieRepository.findAll(pageable);
 	}
 
+	public Page<Movie> findAllPagedAndSortedAndFilteredByName(Integer pageNo, Integer pageSize, String sortBy, String asc, String movieName) {
+		Sort.Direction direction = asc.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+		Sort sort = Sort.by(direction, sortBy);
+		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+		return movieRepository.findMovieByMovieNameLike("%"+movieName+"%", pageable);
+	}
+
 	public List<Actor> findAllByMovieId(Integer id) {
 		return actorRepository.findAllByMovieId(id);
 	}

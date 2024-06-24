@@ -37,6 +37,13 @@ export class MovieService {
         return this.http.get<Movie[]>(this.apiUrl + `/${pageNo}/${pageSize}/${sortCol}/${sortDir}`);
       }
 
+      getMoviesPageableAndSortedAndFilteredByMovieName(pageNo: number, pageSize: number, sortCol: string, sortDir: string, movieName: string): Observable<any> {
+        if (movieName.length === 0) {
+          return this.getMoviesPageableAndSorted(pageNo, pageSize, sortCol, sortDir);
+        }
+        return this.http.get<Movie[]>(this.apiUrl + `/${pageNo}/${pageSize}/${sortCol}/${sortDir}/${movieName}`);
+      }
+
       getActorsForMovie(id: number): Observable<Actor[]> {
         return this.http.get<Actor[]>(this.apiUrl + `/actors/${id}`);
       }
