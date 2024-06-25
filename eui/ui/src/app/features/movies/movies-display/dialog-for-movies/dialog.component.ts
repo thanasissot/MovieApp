@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, inject, Output} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {
   MatDialog,
@@ -13,6 +13,9 @@ import {
 import {Movie} from "../../../../models/movie";
 import {MovieService} from "../../../../services/movie.service";
 import {ActorService} from "../../../../services/actor.service";
+import EventEmitter from "events";
+import {SharedService} from "../../../../services/shared.service";
+import {Observable} from "rxjs";
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -24,53 +27,45 @@ import {ActorService} from "../../../../services/actor.service";
 })
 export class DialogComponent {
   readonly dialogRef = inject(MatDialogRef<DialogComponent>);
+  messageContent: string = '';
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private movieService: MovieService,
               private actorService: ActorService,
+              private sharedService: SharedService,
 
-              ) {}
+              ) {
+    this.messageContent = data.messageContent;
+  }
+
+  handleObserver(toSubscribe: Observable<any>, msgOk: string): void {
+    toSubscribe.subscribe({
+      next: (data) => {
+        this.sharedService.setDialogObservable$(true);
+        alert(msgOk);
+      },
+      error: (er) => {
+        console.log(er);
+        this.sharedService.setDialogObservable$(false);
+      }})
+  }
 
   onYesClick(): void {
-
-    if (this.data.actionActor) {
-      this.actorService.deleteActor(this.data.actor.id)
-        .subscribe({
-          next: (data) => {
-            console.log(data);
-          },
-          error: (er) => {
-            console.log(er);
-          }});
-      return;
-    }
-
     let movie = this.data.movie as Movie;
 
     if (this.data.actionDelete === true) {
-      this.movieService.deleteMovie(movie.id)
-        .subscribe({
-          next: () => {
-            alert('Movie delete');
-          },
-          error: (er) => {
-            console.log(er);
-            alert('Something went wrong.');
-          }});
+      this.handleObserver(this.movieService.deleteMovie(movie.id),
+        'Movie delete'
+        );
     } else {
-      this.movieService.putUpdateMovie(movie.id, !movie.watched)
-        .subscribe({
-          next: () => {
-            alert('Movie updated');
-          },
-          error: (er) => {
-            console.log(er);
-            alert('Something went wrong.');
-          }});
+      this.handleObserver(this.movieService.putUpdateMovie(movie.id, !movie.watched),
+        'Movie updated'
+      )
     }
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+
   }
 
 }

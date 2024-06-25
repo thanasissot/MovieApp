@@ -1,8 +1,5 @@
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <input matInput placeholder="Ex. ium" #input>
-</mat-form-field>
+
 <div class="example-container mat-elevation-z8">
   @if (loading) {
   <div class="example-loading-shade">
@@ -11,6 +8,10 @@
   }
   </div>
   }
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput placeholder="Ex. ium" #input>
+  </mat-form-field>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
     >
     <!-- Position Column -->
@@ -53,7 +54,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <mat-paginator
-    (page)="pageChangeEvent($event)"
+    (page)="onPageChange($event)"
     [length]="resultsLength"
     [pageSize]="pageSize"
     [pageIndex]="pageIndex"
