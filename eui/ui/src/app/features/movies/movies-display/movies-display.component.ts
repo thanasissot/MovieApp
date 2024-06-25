@@ -43,8 +43,7 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('input') input!: ElementRef;
-  private dialogSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  public dialogObservable$: Observable<any> = this.dialogSubject.asObservable();
+  // @Output() filterChanged: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private movieService: MovieService,
@@ -68,11 +67,6 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
           this.data = data;
           this.dataSource = data['content'] as Movie[];
           this.resultsLength = this.data['totalElements'];
-
-          // this.paginator.pageIndex = 0;
-          // this.resultsLength = data['totalElements'];
-          // this.cdref.detectChanges();
-          // this.table.renderRows();
         },
         error: (er) => {
           console.log(er);
@@ -100,6 +94,20 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
         this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.movieNameFilter)
       }
     });
+
+    fromEvent(this.input.nativeElement, 'input')
+      .pipe(
+        debounceTime(100),
+        distinctUntilChanged(),
+        tap(() => {
+          this.movieNameFilter = this.input.nativeElement.value;
+          this.paginator.pageIndex = 0; // Reset paginator on filter change
+        })
+      )
+      .subscribe({
+          next: () => this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.movieNameFilter)
+        }
+      );
   }
 
   openDialogEdit(enterAnimationDuration: string, exitAnimationDuration: string, movie: Movie): void {
@@ -111,11 +119,6 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
       exitAnimationDuration,
     });
 
-    dialogRef.afterClosed().subscribe(
-      (next) => {
-        console.log(next)
-        this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.movieNameFilter)
-      });
   }
 
   openDialogDelete(enterAnimationDuration: string, exitAnimationDuration: string, movie: Movie): void {
@@ -127,40 +130,9 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
       exitAnimationDuration,
     });
 
-    dialogRef.afterClosed().subscribe(
-      (next) => {
-        console.log(next)
-        this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.movieNameFilter)
-    });
   }
 
   addData() {
   }
-
-
-
-  loadDataOld(pageIndex: number, pageSize: number, sortColumn: string, sortOrder: string, movieNameFilter: string): void {
-    this.loading = true;
-    this.movieService.getMoviesPageableAndSortedAndFilteredByMovieName(pageIndex, pageSize, sortColumn || 'id', sortOrder || 'asc', movieNameFilter || '')
-      .pipe(take(1)).
-    subscribe({
-      next: (data: any) => {
-        this.dataSource = data['content'] as Movie[];
-        this.paginator.pageIndex = 0;
-        this.resultsLength = data['totalElements'];
-        this.cdref.detectChanges();
-        this.table.renderRows();
-        this.loading = false;
-      },
-      error: (er) => {
-        console.log(er);
-        this.loading = false;
-      }});
-  }
-
-  loadData1(pageIndex: number, pageSize: number, sortColumn: string, sortOrder: string, movieNameFilter: string): Observable<Movie[]> {
-    return this.movieService.getMoviesPageableAndSortedAndFilteredByMovieName(pageIndex, pageSize, sortColumn || 'id', sortOrder || 'asc', movieNameFilter || '');
-  }
-
 
 }
