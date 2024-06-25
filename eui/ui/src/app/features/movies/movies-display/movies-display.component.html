@@ -62,3 +62,41 @@
     showFirstLastButtons>
   </mat-paginator>
 </div>
+<mat-divider style="margin: 10px auto;"></mat-divider>
+<div>
+  <div class="container mx-auto px-14">
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Add movie</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="movieForm">
+          <mat-form-field class="example-full-width">
+            <mat-label>Movie Name</mat-label>
+            <input type="text" matInput [formControl]="movieName" placeholder="Ex. Goodfellas">
+            @if (movieName.hasError('email') && !movieName.hasError('required')) {
+            <mat-error>Please enter a valid movie name</mat-error>
+            }
+            @if (movieName.hasError('required')) {
+            <mat-error>Movie name is <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Year</mat-label>
+            <input type="text" matInput [formControl]="year" placeholder="Ex. 2007">
+            @if (year.hasError('email') && !year.hasError('required')) {
+            <mat-error>Please enter a valid year</mat-error>
+            }
+            @if (year.hasError('required')) {
+            <mat-error>Year is <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+          <section>
+            <button type="button" mat-raised-button>Cancel</button>
+            <button type="submit" (click)="onSubmit()" mat-raised-button>Save</button>
+          </section>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

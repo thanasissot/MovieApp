@@ -16,6 +16,10 @@ import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
+import {MatDivider} from "@angular/material/divider";
+import {MatButton} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -43,7 +47,14 @@ import {MatInputModule} from "@angular/material/input";
     MatLabel,
     MatFormField,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule,
+    MatCardTitle,
+    MatCardHeader,
+    MatCard,
+    MatCardContent,
+    MatDivider,
+    MatButton
   ]
 })
 export class MoviesModule { }

@@ -3,22 +3,20 @@ import {
   ChangeDetectorRef,
   Component, ElementRef,
   inject,
-  Input,
-  OnInit, Output,
+  OnInit,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import {Movie} from "../../../models/movie";
-import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, take, tap} from "rxjs/operators";
+import {catchError, debounceTime, distinctUntilChanged, take, tap} from "rxjs/operators";
 import {MovieService} from "../../../services/movie.service";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {DialogComponent} from "./dialog-for-movies/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {BehaviorSubject, from, fromEvent, merge, Observable, of as observableOf} from "rxjs";
-import EventEmitter from "events";
+import {fromEvent} from "rxjs";
 import {SharedService} from "../../../services/shared.service";
 
 @Component({
@@ -36,14 +34,16 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
   pageIndex = 0;
   pageSize = 5;
   movieNameFilter: string = '';
-  data: any;
+  movieName = new FormControl('', Validators.required);
+  year = new FormControl('', [Validators.required]);
+  movieForm: FormGroup;
 
   dataSource:Movie[] = [];
   @ViewChild(MatTable) table!: MatTable<Movie>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('input') input!: ElementRef;
-  // @Output() filterChanged: EventEmitter<any> = new EventEmitter();
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
 
   constructor(
     private movieService: MovieService,
@@ -51,6 +51,11 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
     private cdref: ChangeDetectorRef,
     private _fb : FormBuilder,
   ) {
+    this.movieForm = this._fb.group(
+      {
+        movieName: this.movieName,
+        year: this.year
+      });
     this.loading = true;
   }
 
@@ -64,9 +69,8 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
       .pipe(take(1))
       .subscribe({
         next: (data: any) => {
-          this.data = data;
           this.dataSource = data['content'] as Movie[];
-          this.resultsLength = this.data['totalElements'];
+          this.resultsLength = data['totalElements'];
         },
         error: (er) => {
           console.log(er);
@@ -132,7 +136,23 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
 
   }
 
-  addData() {
+  onSubmit(){
+    if(this.movieForm.invalid){
+      this.movieForm.markAllAsTouched();
+    }else{
+      let movie = this.movieForm.value as Movie;
+      this.movieService.postMovieCreate(movie)
+        .subscribe({
+          next: () => {
+            this.movieForm.reset();
+            this.formGroupDirective.resetForm();
+            this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.movieNameFilter);
+          },
+          error: (er) => {
+            console.log(er);
+            alert(er);
+          }});
+    }
   }
 
 }
