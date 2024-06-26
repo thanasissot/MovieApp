@@ -8,12 +8,19 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(uniqueConstraints={
+		@UniqueConstraint(columnNames = {"firstName", "lastName"})
+})
 public class Actor {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(unique = true)
-	private String fullname;
+
+	@Column
+	private String firstName;
+
+	@Column
+	private String lastName;
 
 	@JsonManagedReference
 	@ManyToMany(fetch = FetchType.EAGER)

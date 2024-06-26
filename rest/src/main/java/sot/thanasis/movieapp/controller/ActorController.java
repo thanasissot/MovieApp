@@ -41,10 +41,12 @@ public class ActorController {
 		return ResponseEntity.ok(res);
 	}
 
-	@GetMapping("/{pageNo}/{pageSize}/{sortCol}/{sortDirection}/{actorName}")
+	@GetMapping("/filter/{pageNo}/{pageSize}/{sortCol}/{sortDirection}")
 	public ResponseEntity<Page<Actor>> findAllActorsPageableAndSortedAndFiltered(@PathVariable Integer pageNo, @PathVariable Integer pageSize,
-																				 @PathVariable String sortCol, @PathVariable String sortDirection, @PathVariable String actorName) {
-		Page<Actor> res = actorService.findAllPagedAndSortedAndFilteredByName(pageNo, pageSize, sortCol, sortDirection, actorName);
+																				 @PathVariable String sortCol, @PathVariable String sortDirection,
+																				 @RequestParam(name = "firstName") String firstName,
+																				 @RequestParam(name = "lastName") String lastName) {
+		Page<Actor> res = actorService.findAllPagedAndSortedAndFilteredByName(pageNo, pageSize, sortCol, sortDirection, firstName, lastName);
 		return ResponseEntity.ok(res);
 	}
 

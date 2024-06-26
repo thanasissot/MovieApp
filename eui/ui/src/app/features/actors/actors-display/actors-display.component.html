@@ -9,8 +9,12 @@
   </div>
   }
   <mat-form-field>
-    <mat-label>Filter</mat-label>
+    <mat-label>First Name Filter</mat-label>
     <input matInput placeholder="Ex. ium" #input>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Last Name Filter</mat-label>
+    <input matInput placeholder="Ex. ium" #inputLast>
   </mat-form-field>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort >
     <!-- Position Column -->
@@ -20,9 +24,14 @@
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="Name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header > Full Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.fullname}} </td>
+    <ng-container matColumnDef="FirstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header > First Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="LastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header > Last Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
     </ng-container>
 
     <ng-container matColumnDef="Delete">
@@ -53,13 +62,23 @@
       <mat-card-content>
         <form [formGroup]="actorForm">
           <mat-form-field class="example-full-width">
-            <mat-label>Actor Full Name</mat-label>
-            <input type="text" matInput [formControl]="fullname" placeholder="Ex. Goodfellas">
-            @if (fullname.hasError('email') && !fullname.hasError('required')) {
-            <mat-error>Please enter a valid Actor full name</mat-error>
+            <mat-label>Actor First Name</mat-label>
+            <input type="text" matInput [formControl]="firstName" placeholder="Ex. Goodfellas">
+            @if (firstName.hasError('email') && !firstName.hasError('required')) {
+            <mat-error>Please enter a valid full name</mat-error>
             }
-            @if (fullname.hasError('required')) {
-            <mat-error>Movie name is <strong>required</strong></mat-error>
+            @if (firstName.hasError('required')) {
+            <mat-error>Actor's first name is <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Actor Last Name</mat-label>
+            <input type="text" matInput [formControl]="lastName" placeholder="Ex. Goodfellas">
+            @if (lastName.hasError('email') && !lastName.hasError('required')) {
+            <mat-error>Please enter a valid name</mat-error>
+            }
+            @if (lastName.hasError('required')) {
+            <mat-error>Actor's last name is <strong>required</strong></mat-error>
             }
           </mat-form-field>
 <!--          <mat-form-field class="example-full-width">-->

@@ -2,6 +2,7 @@ import {Movie} from "./movie";
 
 export interface Actor {
   id: number;
-  fullname: string;
+  firstName: string;
+  lastName: string;
   movies: Movie[];
 }

@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class ActorDto {
-    private String fullname;
+    private String firstName;
+    private String lastName;
 }

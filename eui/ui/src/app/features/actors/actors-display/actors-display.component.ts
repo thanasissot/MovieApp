@@ -20,22 +20,25 @@ import {ActorDialogComponent} from "./dialog-for-actors/dialog.component";
 })
 export class ActorsDisplayComponent implements AfterViewInit, OnInit {
   readonly dialog = inject(MatDialog);
-  displayedColumns: string[] = ['Id', 'Name', 'Delete'];
+  displayedColumns: string[] = ['Id', 'FirstName', 'LastName', 'Delete'];
   actors: Actor[] = [];
   loading = true;
   resultsLength = 0;
   // pageEvent: PageEvent;
   pageIndex = 0;
   pageSize = 5;
-  actorNameFilter: string = '';
-  fullname = new FormControl('', Validators.required);
+  actorFirstNameFilter: string = '';
+  actorLastNameFilter: string = '';
+  firstName = new FormControl('', Validators.required);
+  lastName = new FormControl('', Validators.required);
   actorForm: FormGroup;
 
   dataSource:Actor[] = [];
   @ViewChild(MatTable) table!: MatTable<Movie>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('input') input!: ElementRef;
+  @ViewChild('input') inputFirst!: ElementRef;
+  @ViewChild('inputLast') inputLast!: ElementRef;
   @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
 
   constructor(
@@ -46,18 +49,19 @@ export class ActorsDisplayComponent implements AfterViewInit, OnInit {
   ) {
     this.actorForm = this._fb.group(
       {
-        fullname: this.fullname,
+        firstName: this.firstName,
+        lastName: this.lastName
       });
     this.loading = true;
   }
 
   ngOnInit() {
-    this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.actorNameFilter);
+    this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.actorFirstNameFilter, this.actorLastNameFilter);
   }
 
-  loadData(pageIndex: number, pageSize: number, sortColumn: string, sortOrder: string, movieNameFilter: string): void {
+  loadData(pageIndex: number, pageSize: number, sortColumn: string, sortOrder: string, actorFirstNameFilter: string, actorLastNameFilter: string): void {
     this.actorService
-      .getActorsPageableAndSortedAndFilteredByFullname(pageIndex, pageSize, sortColumn || 'id', sortOrder || 'asc', movieNameFilter || '')
+      .getActorsPageableAndSortedAndFilteredByFullname(pageIndex, pageSize, sortColumn || 'id', sortOrder || 'asc', actorFirstNameFilter || '', actorLastNameFilter || '')
       .pipe(take(1))
       .subscribe({
         next: (data: any) => {
@@ -76,28 +80,50 @@ export class ActorsDisplayComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.sort.sortChange.subscribe(() => (
-      this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.actorNameFilter)
+      this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.actorFirstNameFilter, this.actorLastNameFilter)
     ));
 
     this.sharedService.dialogObservable$.subscribe((data) => {
       if(data) {
         this.actorForm.reset();
         this.formGroupDirective.resetForm();
-        this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.actorNameFilter)
+        this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.actorFirstNameFilter, this.actorLastNameFilter)
       }
     });
 
-    fromEvent(this.input.nativeElement, 'input')
+    fromEvent(this.inputFirst.nativeElement, 'input')
       .pipe(
         debounceTime(100),
         distinctUntilChanged(),
         tap(() => {
-          this.actorNameFilter = this.input.nativeElement.value;
+          console.log('as1')
+          this.actorFirstNameFilter = this.inputFirst.nativeElement.value;
           this.paginator.pageIndex = 0; // Reset paginator on filter change
         })
       )
       .subscribe({
-          next: () => this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.actorNameFilter)
+          next: () => {
+            console.log('as12')
+            this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.actorFirstNameFilter, this.actorLastNameFilter)
+          }
+        }
+      );
+
+    fromEvent(this.inputLast.nativeElement, 'input')
+      .pipe(
+        debounceTime(100),
+        distinctUntilChanged(),
+        tap(() => {
+          console.log('as2')
+          this.actorLastNameFilter = this.inputLast.nativeElement.value;
+          this.paginator.pageIndex = 0; // Reset paginator on filter change
+        })
+      )
+      .subscribe({
+          next: () => {
+            console.log('as22')
+            this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.actorFirstNameFilter, this.actorLastNameFilter)
+          }
         }
       );
   }
@@ -105,7 +131,7 @@ export class ActorsDisplayComponent implements AfterViewInit, OnInit {
   onPageChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.actorNameFilter);
+    this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.actorFirstNameFilter, this.actorLastNameFilter);
   }
 
   // openDialogEdit(enterAnimationDuration: string, exitAnimationDuration: string, actor: Actor): void {
@@ -122,7 +148,7 @@ export class ActorsDisplayComponent implements AfterViewInit, OnInit {
   openDialogDeleteActor(enterAnimationDuration: string, exitAnimationDuration: string, actor: Actor): void {
     const dialogRef = this.dialog.open(ActorDialogComponent, {
       data: {actor, "actionDelete":true,
-        messageContent: `Delete ${actor.fullname}?`},
+        messageContent: `Delete ${actor.firstName} ${actor.lastName}?`},
       width: '250px',
       enterAnimationDuration,
       exitAnimationDuration,
@@ -138,7 +164,7 @@ export class ActorsDisplayComponent implements AfterViewInit, OnInit {
       let actor = this.actorForm.value as Actor;
       const dialogRef = this.dialog.open(ActorDialogComponent, {
         data: {actor, "actionCreate":true,
-          messageContent: `Create new ${actor.fullname} actor?`},
+          messageContent: `Create new ${actor.firstName} ${actor.lastName} actor?`},
         width: '250px',
         enterAnimationDuration,
         exitAnimationDuration,

@@ -53,7 +53,7 @@ export class ActorDialogComponent {
 
     if (this.data.actionDelete === true) {
       this.handleObserver(this.actorService.deleteActor(actor.id),
-        'Movie delete'
+        'Actor Deleted'
         );
     }
     // else if (this.data.actionDelete === false) {

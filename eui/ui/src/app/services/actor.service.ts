@@ -27,11 +27,11 @@ export class ActorService {
     return this.http.get<Actor[]>(this.apiUrl + `/${pageNo}/${pageSize}/${sortCol}/${sortDir}`);
   }
 
-  getActorsPageableAndSortedAndFilteredByFullname(pageNo: number, pageSize: number, sortCol: string, sortDir: string, fullname: string): Observable<any> {
-    if (fullname.length === 0) {
-      return this.getActorsPageableAndSorted(pageNo, pageSize, sortCol, sortDir);
-    }
-    return this.http.get<Actor[]>(this.apiUrl + `/${pageNo}/${pageSize}/${sortCol}/${sortDir}/${fullname}`);
+  getActorsPageableAndSortedAndFilteredByFullname(pageNo: number, pageSize: number, sortCol: string, sortDir: string, firstName: string, lastName: string): Observable<any> {
+    // if (firstName.length === 0 && lastName.length === 0) {
+    //   return this.getActorsPageableAndSorted(pageNo, pageSize, sortCol, sortDir);
+    // }
+    return this.http.get<Actor[]>(this.apiUrl + `/filter/${pageNo}/${pageSize}/${sortCol}/${sortDir}?firstName=${firstName}&lastName=${lastName}`);
   }
 
   postActorCreate(actor: Actor): Observable<Actor> {

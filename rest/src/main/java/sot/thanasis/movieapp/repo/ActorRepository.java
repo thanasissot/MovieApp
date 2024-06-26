@@ -18,6 +18,6 @@ public interface ActorRepository extends JpaRepository<Actor, Long> {
 			nativeQuery = true)
 	List<Actor> findAllByMovieId(Integer id);
 
-	Optional<Actor> findByFullname(String fullname);
-	Page<Actor> findByFullnameLike(String fullname, Pageable pageable);
+	Optional<Actor> findByFirstNameAndLastName(String firstName, String lastName);
+	Page<Actor> findByFirstNameLikeAndLastNameLike(String firstName, String lastName, Pageable pageable);
 }

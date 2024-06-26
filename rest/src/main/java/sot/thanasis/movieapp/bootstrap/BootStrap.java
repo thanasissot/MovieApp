@@ -29,7 +29,7 @@ public class BootStrap {
 		movie2 = movieRepository.save(movie2);
 
 		Actor actor = new Actor();
-		actor.setFullname("Jim Carrey");
+		actor.setFirstName("Jim Carrey");
 		actor = actorRepository.save(actor);
 
 		movieService.assignActorToMovie(actor.getId(), movie1.getId());

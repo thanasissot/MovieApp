@@ -11,11 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sot.thanasis.movieapp.dto.ActorDto;
 import sot.thanasis.movieapp.mapper.ActorMapper;
-import sot.thanasis.movieapp.mapper.MovieMapper;
 import sot.thanasis.movieapp.model.Actor;
-import sot.thanasis.movieapp.model.Movie;
 import sot.thanasis.movieapp.repo.ActorRepository;
-import sot.thanasis.movieapp.repo.MovieRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -45,15 +42,15 @@ public class ActorService {
 		return actorRepository.findAll(pageable);
 	}
 
-	public Page<Actor> findAllPagedAndSortedAndFilteredByName(Integer pageNo, Integer pageSize, String sortBy, String asc, String movieName) {
+	public Page<Actor> findAllPagedAndSortedAndFilteredByName(Integer pageNo, Integer pageSize, String sortBy, String asc, String firstName, String lastName) {
 		Sort.Direction direction = asc.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
 		Sort sort = Sort.by(direction, sortBy);
 		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-		return actorRepository.findByFullnameLike("%"+movieName+"%", pageable);
+		return actorRepository.findByFirstNameLikeAndLastNameLike("%"+firstName+"%", "%"+lastName+"%", pageable);
 	}
 
 	public Actor create(ActorDto actorDto) throws Exception {
-		if (findByActorName(actorDto.getFullname()) == null) {
+		if (findByActorName(actorDto.getFirstName(), actorDto.getLastName()) == null) {
 			Actor actor = actorMapper.dtoToEntity(actorDto);
 			return actorRepository.save(actor);
 		}
@@ -69,8 +66,8 @@ public class ActorService {
 		}
 	}
 
-	public Actor findByActorName(String fullname) {
-		Optional<Actor> optionalActor = actorRepository.findByFullname(fullname);
+	public Actor findByActorName(String firstName, String lastName) {
+		Optional<Actor> optionalActor = actorRepository.findByFirstNameAndLastName(firstName, lastName);
 		return optionalActor.orElse(null);
 	}
 
