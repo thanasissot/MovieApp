@@ -34,6 +34,20 @@ public class ActorController {
 		return ResponseEntity.ok(res);
 	}
 
+	@GetMapping("/{pageNo}/{pageSize}/{sortCol}/{sortDirection}")
+	public ResponseEntity<Page<Actor>> findAllActorsPageableAndSorted(@PathVariable Integer pageNo, @PathVariable Integer pageSize,
+																	  @PathVariable String sortCol, @PathVariable String sortDirection) {
+		Page<Actor> res = actorService.findAllPagedAndSorted(pageNo, pageSize, sortCol, sortDirection);
+		return ResponseEntity.ok(res);
+	}
+
+	@GetMapping("/{pageNo}/{pageSize}/{sortCol}/{sortDirection}/{actorName}")
+	public ResponseEntity<Page<Actor>> findAllActorsPageableAndSortedAndFiltered(@PathVariable Integer pageNo, @PathVariable Integer pageSize,
+																				 @PathVariable String sortCol, @PathVariable String sortDirection, @PathVariable String actorName) {
+		Page<Actor> res = actorService.findAllPagedAndSortedAndFilteredByName(pageNo, pageSize, sortCol, sortDirection, actorName);
+		return ResponseEntity.ok(res);
+	}
+
 	@PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Actor> createMovie(@RequestBody ActorDto actorDto) throws Exception {
 		return ResponseEntity.ok(actorService.create(actorDto));

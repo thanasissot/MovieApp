@@ -1,5 +1,7 @@
 package sot.thanasis.movieapp.repo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,5 @@ public interface ActorRepository extends JpaRepository<Actor, Long> {
 	List<Actor> findAllByMovieId(Integer id);
 
 	Optional<Actor> findByFullname(String fullname);
+	Page<Actor> findByFullnameLike(String fullname, Pageable pageable);
 }
