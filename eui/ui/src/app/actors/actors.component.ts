@@ -11,7 +11,6 @@ import { take } from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ChangeDetectorRef } from '@angular/core';
 import {Movie} from "../models/movie";
-import {DialogComponent} from "../movies-old/dialog.component";
 import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 
@@ -31,7 +30,6 @@ import {MatButtonModule} from "@angular/material/button";
 export class ActorsComponent implements AfterViewInit {
   readonly dialog = inject(MatDialog);
   displayedColumns: string[] = ['Id', 'Name', 'Delete'];
-
   actors: Actor[] = [];
     selectedActor?: Actor;
     onSelect(actor: Actor): void {
@@ -92,12 +90,12 @@ export class ActorsComponent implements AfterViewInit {
   }
 
   openDialogDeleteActor(enterAnimationDuration: string, exitAnimationDuration: string, actor: Actor) {
-    this.dialog.open(DialogComponent, {
-      data: {actor, 'actionActor':true },
-      width: '250px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-    });
+    // this.dialog.open(DialogComponent, {
+    //   data: {actor, 'actionActor':true },
+    //   width: '250px',
+    //   enterAnimationDuration,
+    //   exitAnimationDuration,
+    // });
 
   }
 

@@ -10,12 +10,11 @@ import {
   MAT_DIALOG_DATA,
 
 } from '@angular/material/dialog';
-import {Movie} from "../../../../models/movie";
-import {MovieService} from "../../../../services/movie.service";
 import {ActorService} from "../../../../services/actor.service";
 import EventEmitter from "events";
 import {SharedService} from "../../../../services/shared.service";
 import {Observable} from "rxjs";
+import {Actor} from "../../../../models/actor";
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -25,12 +24,12 @@ import {Observable} from "rxjs";
   ],
 
 })
-export class DialogComponent {
-  readonly dialogRef = inject(MatDialogRef<DialogComponent>);
+export class ActorDialogComponent {
+  readonly dialogRef = inject(MatDialogRef<ActorDialogComponent>);
   messageContent: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private movieService: MovieService,
+              private actorService: ActorService,
               private sharedService: SharedService,
 
               ) {
@@ -50,19 +49,21 @@ export class DialogComponent {
   }
 
   onYesClick(): void {
-    let movie = this.data.movie as Movie;
+    let actor = this.data.actor as Actor;
 
     if (this.data.actionDelete === true) {
-      this.handleObserver(this.movieService.deleteMovie(movie.id),
+      this.handleObserver(this.actorService.deleteActor(actor.id),
         'Movie delete'
         );
-    } else if (this.data.actionDelete === false) {
-      this.handleObserver(this.movieService.putUpdateMovie(movie.id, !movie.watched),
-        'Movie updated'
-      )
-    } else if (this.data.actionCreate) {
-      this.handleObserver(this.movieService.postMovieCreate(movie),
-        'Movie Created'
+    }
+    // else if (this.data.actionDelete === false) {
+    //   this.handleObserver(this.movieService.putUpdateMovie(movie.id, !movie.watched),
+    //     'Movie updated'
+    //   )
+    // }
+    else if (this.data.actionCreate) {
+      this.handleObserver(this.actorService.postActorCreate(actor),
+        'Actor Created'
       )
     }
   }

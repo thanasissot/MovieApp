@@ -23,6 +23,17 @@ export class ActorService {
         return this.http.get<Actor[]>(this.apiUrl + `/${pageNo}/${pageSize}`);
     }
 
+  getActorsPageableAndSorted(pageNo: number, pageSize: number, sortCol: string, sortDir: string): Observable<any> {
+    return this.http.get<Actor[]>(this.apiUrl + `/${pageNo}/${pageSize}/${sortCol}/${sortDir}`);
+  }
+
+  getActorsPageableAndSortedAndFilteredByFullname(pageNo: number, pageSize: number, sortCol: string, sortDir: string, fullname: string): Observable<any> {
+    if (fullname.length === 0) {
+      return this.getActorsPageableAndSorted(pageNo, pageSize, sortCol, sortDir);
+    }
+    return this.http.get<Actor[]>(this.apiUrl + `/${pageNo}/${pageSize}/${sortCol}/${sortDir}/${fullname}`);
+  }
+
   postActorCreate(actor: Actor): Observable<Actor> {
     return this.http.post<Actor>(this.apiUrl + '/create', actor, { headers: this.httpHeaders });
   }
