@@ -57,9 +57,13 @@ export class DialogComponent {
       this.handleObserver(this.movieService.deleteMovie(movie.id),
         'Movie delete'
         );
-    } else {
+    } else if (this.data.actionDelete === false) {
       this.handleObserver(this.movieService.putUpdateMovie(movie.id, !movie.watched),
         'Movie updated'
+      )
+    } else if (this.data.actionCreate) {
+      this.handleObserver(this.movieService.postMovieCreate(movie),
+        'Movie Created'
       )
     }
   }

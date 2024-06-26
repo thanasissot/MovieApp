@@ -95,6 +95,8 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
 
     this.sharedService.dialogObservable$.subscribe((data) => {
       if(data) {
+        this.movieForm.reset();
+        this.formGroupDirective.resetForm();
         this.loadData(this.pageIndex, this.pageSize, this.sort.active || 'id', this.sort.direction || 'asc', this.movieNameFilter)
       }
     });
@@ -136,22 +138,31 @@ export class MoviesDisplayComponent implements AfterViewInit, OnInit {
 
   }
 
-  onSubmit(){
+  openDialogCreate(enterAnimationDuration: string, exitAnimationDuration: string){
     if(this.movieForm.invalid){
       this.movieForm.markAllAsTouched();
-    }else{
+    } else{
+
       let movie = this.movieForm.value as Movie;
-      this.movieService.postMovieCreate(movie)
-        .subscribe({
-          next: () => {
-            this.movieForm.reset();
-            this.formGroupDirective.resetForm();
-            this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.movieNameFilter);
-          },
-          error: (er) => {
-            console.log(er);
-            alert(er);
-          }});
+      const dialogRef = this.dialog.open(DialogComponent, {
+        data: {movie, "actionCreate":true,
+          messageContent: `Create new ${movie.movieName} movie?`},
+        width: '250px',
+        enterAnimationDuration,
+        exitAnimationDuration,
+      });
+
+      // this.movieService.postMovieCreate(movie)
+      //   .subscribe({
+      //     next: () => {
+      //       this.movieForm.reset();
+      //       this.formGroupDirective.resetForm();
+      //       this.loadData(this.pageIndex, this.pageSize, this.sort?.active, this.sort?.direction, this.movieNameFilter);
+      //     },
+      //     error: (er) => {
+      //       console.log(er);
+      //       alert(er);
+      //     }});
     }
   }
 
